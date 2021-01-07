@@ -3,14 +3,19 @@ window.heroes = [];
 
 //al cargar pagina, se realiza peticion de los superheroes
 window.addEventListener("DOMContentLoaded",async ()=>{
-    const respuesta = await axios.get("http://157.245.138.232:9091/api/v1/test/superheroes");
+    try{
+        const respuesta = await axios.get("http://157.245.138.232:9091/api/v1/test/superheroes");
     
-    for (let i = 0; i < respuesta.data.data.length; i++) {
-        window.heroes.push(respuesta.data.data[i]);
-        window.mostrar(respuesta.data.data[i]);
-            
-
+        for (let i = 0; i < respuesta.data.data.length; i++) {
+            window.heroes.push(respuesta.data.data[i]);
+            window.mostrar(respuesta.data.data[i]);
+                
+    
+        }
+    }catch(e){
+        new Toast({message: 'Error al Cargar Héroe en la lista',type: 'danger'});
     }
+    
 })
 
 //Mostrar Superhéroes :
@@ -22,6 +27,7 @@ window.mostrar = (heroe)=>{
     copia.querySelector("#nombre-real").innerText = heroe.nombreReal;
     copia.querySelector("#nombre-heroe").innerText = heroe.nombre;
     copia.querySelector("#imagen-heroe").src = heroe.avatarURL;
+    copia.querySelector("#imagen-heroe").nombre = heroe.nombre;
     copia.querySelector("#btn-detalle").heroeId = heroe.id;
     copia.querySelector("#btn-detalle").addEventListener('click', detalleId);
     contenedor.appendChild(copia);
@@ -30,10 +36,13 @@ window.mostrar = (heroe)=>{
 //Pedir datos por ID al seleccionar heroe en la lista
 async function detalleId(){
     let id = this.heroeId;
-    console.log(id);
-    const respuesta = await axios.get("http://157.245.138.232:9091/api/v1/test/superheroes/"+id);
-    console.log("entra en detalleId");
-    window.mostrarDetalle(respuesta.data.data);
+    try{
+        const respuesta = await axios.get("http://157.245.138.232:9091/api/v1/test/superheroes/"+id);
+        window.mostrarDetalle(respuesta.data.data);
+    }catch(e){
+        new Toast({message: 'Error al Cargar detalles del Héroe',type: 'danger'});
+    }
+ 
 }
 
 
@@ -94,6 +103,7 @@ window.mostrarDetalle = (heroe)=>{
     copia.querySelector("#nombre-real").innerText = heroe.nombreReal;
     copia.querySelector("#nombre-heroe").innerText = heroe.nombre;
     copia.querySelector("#imagen-heroe").src = heroe.avatarURL;
+    copia.querySelector("#imagen-heroe").nombre = heroe.nombre;
     copia.querySelector("#descripcion").innerText = heroe.descripcion;
     Swal.fire({
         title: copia.nombre,
@@ -101,7 +111,11 @@ window.mostrarDetalle = (heroe)=>{
     })
 }
 
+//Verificar si carga correctamente la imagen
+function errorLoadedImg(heroe){
+    new Toast({message: 'Error al Cargar Imagen del Héroe '+heroe,type: 'danger'});
 
+}
 //Capitalizar Texto
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1)
