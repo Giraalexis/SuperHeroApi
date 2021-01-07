@@ -48,7 +48,22 @@
         <div class="row ">
             <div class="col-lg-9 col-md-9 col-sm-11 mx-auto p-0">
                 <div class="card-header bg-light bg-gradient mt-4 border">
-                    <span>Superhéroes</span>
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="col-form-label">Superhéroes</label>
+                        </div>
+                        <div class="col input-group">
+                            <select class="form-select" id="select-filtrar">        
+                                <option value="todos">Todos</option>
+                                <option value="volador">Volador</option>
+                                <option value="noVolador">No Volador</option>
+                              </select>
+                              <button id="btn-filtrar"class="btn btn-outline-secondary" type="button">Filtrar</button>
+                        </div>
+                    </div>
+                    
+                    
+                    
                 </div>
                 <section id="contenedor">
 
